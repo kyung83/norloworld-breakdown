@@ -97,6 +97,14 @@ export default function MainForm() {
     }
   };
 
+  const handleTotal = (e) => {
+    let value = e.target.value;
+    if (value && !value.startsWith('$')) {
+      value = '$' + value;
+    }
+    setTotal(value);
+  };
+
   if (error || postError)
     return <h2 className="text-lg text-center p-4">Error</h2>;
   if (loading || postLoading) return <Spinner />;
@@ -223,17 +231,17 @@ export default function MainForm() {
         </div>
 
         <div className="flex flex-col">
-          <label className="text-sm text-stone-500 file:mr-5 file:py-1 file:px-3 file:border-[1px] file:text-xs file:font-medium file:bg-stone-50 file:text-stone-700 hover:file:cursor-pointer hover:file:bg-blue-50 hover:file:text-blue-700">
-            Total
-          </label>
-          <input
-            type="text"
-            placeholder="Total"
-            value={total}
-            onChange={(e) => setTotal(e.target.value)}
-            className="p-2 rounded border shadow-sm"
-          />
-        </div>
+      <label className="text-sm text-stone-500 file:mr-5 file:py-1 file:px-3 file:border-[1px] file:text-xs file:font-medium file:bg-stone-50 file:text-stone-700 hover:file:cursor-pointer hover:file:bg-blue-50 hover:file:text-blue-700">
+        Total
+      </label>
+      <input
+        type="text"
+        placeholder="$Total"
+        value={total}
+        onChange={handleTotal}
+        className="p-2 rounded border shadow-sm"
+      />
+    </div>
       </div>
 
       {warning && (
