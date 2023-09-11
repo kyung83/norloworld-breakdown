@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useAxios from "axios-hooks";
 
 import ComboBox from "./ComboBox";
@@ -19,15 +19,13 @@ export default function MainForm() {
   const [city, setCity] = useState("");
   const [selectedProvider, setSelectedProvider] = useState({});
   const [repairNeeded, setRepairNeeded] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [repairCategory, setRepairCategory] = useState("");
   const [total, setTotal] = useState("");
-  const [customCategory, setCustomCategory] = useState("");
-  const [showCustomField, setShowCustomField] = useState(false);
-  const [warning, setWarning] = useState(false)
-  const [successMessage, setSuccessMessage] = useState(false)
+  const [warning, setWarning] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(false);
   const [selectedUser, setUser] = useState({});
-
-
 
   const [{ data, loading, error }] = useAxios(endPoint);
   const [
@@ -41,14 +39,28 @@ export default function MainForm() {
     { manual: true }
   );
 
+  const handleCategoryChange = (newCategory) => {
+    setSelectedCategory(newCategory);
+  };
+
+  const handleSubCategoryChange = (newSubCategory) => {
+    setSelectedSubCategory(newSubCategory);
+  };
+
+  useEffect(() => {
+    console.log("Valor actual de repairCategory:", repairCategory);
+  }, [repairCategory]);
+
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!selectedDriver || !selectedState || !selectedProvider || !selectedUser) {
+    if (
+      !selectedDriver ||
+      !selectedState ||
+      !selectedProvider ||
+      !selectedUser
+    ) {
       return setWarning(true);
     }
-
-    const finalRepairCategory =
-      repairCategory === "CUSTOM" ? customCategory : repairCategory;
 
     const body = {
       date,
@@ -59,10 +71,13 @@ export default function MainForm() {
       city,
       providerName: selectedProvider.name,
       repairNeeded,
-      repairCategory: finalRepairCategory,
+      repairCategory: selectedCategory,
+      repairSubCategory: selectedSubCategory,
       total,
-      user: selectedUser.name
+      user: selectedUser.name,
     };
+
+    console.log(body);
     const response = await executePost({
       data: JSON.stringify(body),
     });
@@ -78,8 +93,6 @@ export default function MainForm() {
       setRepairCategory("");
       setTotal("");
       setUser({});
-      setCustomCategory("");
-      setShowCustomField(false);
       setSelectedDriver({});
       setSelectedProvider({});
       setSelectedState({});
@@ -91,20 +104,10 @@ export default function MainForm() {
     }
   }
 
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setRepairCategory(value);
-    if (value === "CUSTOM") {
-      setShowCustomField(true);
-    } else {
-      setShowCustomField(false);
-    }
-  };
-
   const handleTotal = (e) => {
     let value = e.target.value;
-    if (value && !value.startsWith('$')) {
-      value = '$' + value;
+    if (value && !value.startsWith("$")) {
+      value = "$" + value;
     }
     setTotal(value);
   };
@@ -202,45 +205,12 @@ export default function MainForm() {
         </div>
 
         <div className="flex flex-col">
-          <label className="text-sm text-stone-500">Repair Category</label>
-          <select
-            value={repairCategory}
-            onChange={handleChange}
-            className="p-2 rounded border shadow-sm"
-          >
-            <option value="" disabled selected>
-              Select repair category
-            </option>
-            <option value="TIRES">TIRES</option>
-            <option value="AIR/CHAMBERS/GLADHANDS">
-              AIR/CHAMBERS/GLADHANDS
-            </option>
-            <option value="MECHANICAL">MECHANICAL</option>
-            <option value="ELECTRICAL/Lights">ELECTRICAL/Lights</option>
-            <option value="JUMP START">JUMP START</option>
-            <option value="Emmisions">Emmisions</option>
-            <option value="OTHER /GLASS">OTHER /GLASS</option>
-            <option value="Trailer Roof Repair">Trailer Roof Repair</option>
-            <option value="CUSTOM">Other (please specify)</option>
-          </select>
-
-          <ComboBox
-              title="* Category Test"
-              items={repairNeeded}
-              selectedPerson={repairNeeded}
-              setSelectedPerson={setRepairNeeded}
-            />
-          
-      
-          {showCustomField && (
-            <input
-              type="text"
-              placeholder="Enter custom category"
-              value={customCategory}
-              onChange={(e) => setCustomCategory(e.target.value)}
-              className="p-2 rounded border shadow-sm mt-2"
-            />
-          )}
+          <ComboBoxCategory
+            title="Repair Category"
+            items={data.categories}
+            onCategoryChange={handleCategoryChange}
+            onSubCategoryChange={handleSubCategoryChange}
+          />
         </div>
 
         <div className="flex flex-col">
@@ -314,8 +284,9 @@ export default function MainForm() {
       {/* <ProgressBar progress={percentage} /> */}
       <button
         type="submit"
-        className={`${!warning && "mt-4"
-          } rounded-md bg-emerald-700 px-12 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500`}
+        className={`${
+          !warning && "mt-4"
+        } rounded-md bg-emerald-700 px-12 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500`}
       >
         Submit
       </button>
