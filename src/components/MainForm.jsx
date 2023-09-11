@@ -2,6 +2,7 @@ import { useState } from "react";
 import useAxios from "axios-hooks";
 
 import ComboBox from "./ComboBox";
+import ComboBoxCategory from "./ComboboxCategory";
 import ComboBoxGroup from "./ComboBoxGroup";
 import Spinner from "./Spinner";
 // import ProgressBar from './ProgressBar'
@@ -24,6 +25,7 @@ export default function MainForm() {
   const [showCustomField, setShowCustomField] = useState(false);
   const [warning, setWarning] = useState(false)
   const [successMessage, setSuccessMessage] = useState(false)
+  const [selectedUser, setUser] = useState({});
 
 
 
@@ -41,7 +43,7 @@ export default function MainForm() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!selectedDriver || !selectedState || !selectedProvider) {
+    if (!selectedDriver || !selectedState || !selectedProvider || !selectedUser) {
       return setWarning(true);
     }
 
@@ -59,6 +61,7 @@ export default function MainForm() {
       repairNeeded,
       repairCategory: finalRepairCategory,
       total,
+      user: selectedUser.name
     };
     const response = await executePost({
       data: JSON.stringify(body),
@@ -74,6 +77,7 @@ export default function MainForm() {
       setRepairNeeded("");
       setRepairCategory("");
       setTotal("");
+      setUser({});
       setCustomCategory("");
       setShowCustomField(false);
       setSelectedDriver({});
@@ -219,6 +223,15 @@ export default function MainForm() {
             <option value="Trailer Roof Repair">Trailer Roof Repair</option>
             <option value="CUSTOM">Other (please specify)</option>
           </select>
+
+          <ComboBox
+              title="* Category Test"
+              items={repairNeeded}
+              selectedPerson={repairNeeded}
+              setSelectedPerson={setRepairNeeded}
+            />
+          
+      
           {showCustomField && (
             <input
               type="text"
@@ -231,17 +244,23 @@ export default function MainForm() {
         </div>
 
         <div className="flex flex-col">
-      <label className="text-sm text-stone-500 file:mr-5 file:py-1 file:px-3 file:border-[1px] file:text-xs file:font-medium file:bg-stone-50 file:text-stone-700 hover:file:cursor-pointer hover:file:bg-blue-50 hover:file:text-blue-700">
-        Total
-      </label>
-      <input
-        type="text"
-        placeholder="$Total"
-        value={total}
-        onChange={handleTotal}
-        className="p-2 rounded border shadow-sm"
-      />
-    </div>
+          <label className="text-sm text-stone-500 file:mr-5 file:py-1 file:px-3 file:border-[1px] file:text-xs file:font-medium file:bg-stone-50 file:text-stone-700 hover:file:cursor-pointer hover:file:bg-blue-50 hover:file:text-blue-700">
+            Total
+          </label>
+          <input
+            type="text"
+            placeholder="$Total"
+            value={total}
+            onChange={handleTotal}
+            className="p-2 rounded border shadow-sm"
+          />
+          <ComboBox
+            title="* Sumbitted By"
+            items={data.users.map((name, i) => ({ id: i, name }))}
+            selectedPerson={selectedUser}
+            setSelectedPerson={setUser}
+          />
+        </div>
       </div>
 
       {warning && (
@@ -295,9 +314,8 @@ export default function MainForm() {
       {/* <ProgressBar progress={percentage} /> */}
       <button
         type="submit"
-        className={`${
-          !warning && "mt-4"
-        } rounded-md bg-emerald-700 px-12 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500`}
+        className={`${!warning && "mt-4"
+          } rounded-md bg-emerald-700 px-12 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500`}
       >
         Submit
       </button>
