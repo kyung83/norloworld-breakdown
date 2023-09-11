@@ -3,6 +3,7 @@ import useAxios from "axios-hooks";
 
 import ComboBox from "./ComboBox";
 import ComboBoxCategory from "./ComboboxCategory";
+import ComboBoxProviders from "./ComboboxProviders";
 import ComboBoxGroup from "./ComboBoxGroup";
 import Spinner from "./Spinner";
 // import ProgressBar from './ProgressBar'
@@ -42,6 +43,9 @@ export default function MainForm() {
   const handleCategoryChange = (newCategory) => {
     setSelectedCategory(newCategory);
   };
+  function handleProviderChange(provider) {
+    setSelectedProvider(provider);
+}
 
   const handleSubCategoryChange = (newSubCategory) => {
     setSelectedSubCategory(newSubCategory);
@@ -69,7 +73,7 @@ export default function MainForm() {
       trailerNumber,
       stateName: selectedState.name,
       city,
-      providerName: selectedProvider.name,
+      providerName: selectedProvider,
       repairNeeded,
       repairCategory: selectedCategory,
       repairSubCategory: selectedSubCategory,
@@ -184,11 +188,10 @@ export default function MainForm() {
           />
         </div>
 
-        <ComboBox
+        <ComboBoxProviders
           title="* Service Providers"
-          items={data.providers.map((name, i) => ({ id: i, name }))}
-          selectedPerson={selectedProvider}
-          setSelectedPerson={setSelectedProvider}
+          items={data.providers}
+          onCategoryChange={handleProviderChange}
         />
 
         <div className="flex flex-col">

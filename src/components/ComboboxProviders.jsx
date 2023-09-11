@@ -3,113 +3,58 @@ import PropTypes from "prop-types";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { Combobox } from "@headlessui/react";
 
-export default function ComboBoxCategory({
+export default function ComboBoxProviders({
   title,
   items,
   onCategoryChange,
-  onSubCategoryChange,
 }) {
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
-  const [showSubCategory, setShowSubCategory] = useState(false);
-  const [showCustomCategoryField, setShowCustomCategoryField] = useState(false);
-  const [showCustomSubCategoryField, setShowCustomSubCategoryField] =
-    useState(false);
-  const [customCategory, setCustomCategory] = useState("");
-  const [customSubCategory, setCustomSubCategory] = useState("");
-
+  const [selectedProvider, setSelectedProvider] = useState(null);
+  const [showcustomProviderField, setShowcustomProviderField] = useState(false);
+  const [customProvider, setcustomProvider] = useState("");
 
   useEffect(() => {
-    if (selectedCategory?.name === "Add New") {
-      setShowCustomCategoryField(true);
+    if (selectedProvider?.name === "Add New") {
+      setShowcustomProviderField(true);
     } else {
-      setShowCustomCategoryField(false);
-    }
-
-    if (selectedCategory) {
-      setShowSubCategory(true);
-    } else {
-      setShowSubCategory(false);
+      setShowcustomProviderField(false);
     }
 
     if (typeof onCategoryChange === 'function') {
-      onCategoryChange(selectedCategory);
+      onCategoryChange(selectedProvider);
     }
-  }, [selectedCategory, onCategoryChange]); 
+  }, [selectedProvider, onCategoryChange]);
 
   useEffect(() => {
-    if (selectedSubCategory?.name === "Add New") {
-      setShowCustomSubCategoryField(true);
-    } else {
-      setShowCustomSubCategoryField(false);
+    if (selectedProvider?.name === "Add New" && typeof onCategoryChange === 'function') {
+      onCategoryChange({ id: 'custom', name: customProvider });
     }
-
-    if (typeof onSubCategoryChange === 'function') {
-      onSubCategoryChange(selectedSubCategory);
-    }
-  }, [selectedSubCategory, onSubCategoryChange]);
-
-  useEffect(() => {
-    if (selectedCategory?.name === "Add New" && typeof onCategoryChange === 'function') {
-      onCategoryChange({id: 'custom', name: customCategory});
-    }
-  }, [customCategory, onCategoryChange]);
-  
-  useEffect(() => {
-    if (selectedSubCategory?.name === "Add New" && typeof onSubCategoryChange === 'function') {
-      onSubCategoryChange({id: 'custom', name: customSubCategory});
-    }
-  }, [customSubCategory, onSubCategoryChange]);
-
+  }, [customProvider, onCategoryChange]);
+  const mappedItems = items.map((name, index) => ({
+    id: index,
+    name: name,
+  }));
 
   return (
     <div>
       <SingleComboBox
-        items={Object.keys(items).map((key, index) => ({
-          id: index,
-          name: key,
-        }))}
+        items={mappedItems}
         title={title}
-        selectedPerson={selectedCategory}
-        setSelectedPerson={setSelectedCategory}
+        selectedPerson={selectedProvider}
+        setSelectedPerson={setSelectedProvider}
       />
-      {showCustomCategoryField && (
+      {showcustomProviderField && (
         <input
           type="text"
-          placeholder="Enter custom category"
-          value={customCategory}
-          onChange={(e) => setCustomCategory(e.target.value)}
-          className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-
+          placeholder="Enter custom provider"
+          value={customProvider}
+          onChange={(e) => setcustomProvider(e.target.value)}
+          className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
-      )}
-      {showSubCategory && selectedCategory && (
-        <SingleComboBox
-          items={
-            selectedCategory.name === "Add New"
-              ? [{ id: "other", name: "Add New" }]
-              : items[selectedCategory.name].map((sub, index) => ({
-                  id: index,
-                  name: sub,
-                }))
-          }
-          title={`Sub-category of ${selectedCategory.name}`}
-          selectedPerson={selectedSubCategory}
-          setSelectedPerson={setSelectedSubCategory}
-        />
-      )}
-      {showCustomSubCategoryField && (
-        <input
-          type="text"
-          placeholder="Enter custom sub-category"
-          value={customSubCategory}
-          onChange={(e) => setCustomSubCategory(e.target.value)}
-          className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-          />
       )}
     </div>
   );
 }
+
 
 function SingleComboBox({
   items = [],
@@ -142,6 +87,8 @@ function SingleComboBox({
   if (!filteredPeople.some((item) => item.name === "Add New")) {
     filteredPeople.push({ id: "other", name: "Add New" });
   }
+
+  console.log(items)
 
   return (
     <Combobox
@@ -212,7 +159,7 @@ function SingleComboBox({
   );
 }
 
-ComboBoxCategory.propTypes = {
+ComboBoxProviders.propTypes = {
   title: PropTypes.string,
   items: PropTypes.object.isRequired,
 };
@@ -223,5 +170,4 @@ SingleComboBox.propTypes = {
   selectedPerson: PropTypes.object,
   setSelectedPerson: PropTypes.func,
   onCategoryChange: PropTypes.func,
-  onSubCategoryChange: PropTypes.func,
 };
