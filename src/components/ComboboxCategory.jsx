@@ -83,7 +83,7 @@ export default function ComboBoxCategory({
             setQuery(newQuery);
           
             if (newQuery === '') {
-              setCustomCategory(null); // Aquí reseteas selectedPerson
+              setSelectedCategory(null); // Aquí reseteas selectedPerson
             }
           }}
           className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
@@ -164,6 +164,11 @@ function SingleComboBox({
         <Combobox.Input
           className="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           onChange={(event) => setQuery(event.target.value)}
+        onBlur={() => {
+          if (query === "") {
+            setSelectedPerson(null);
+          }
+        }}
           displayValue={(person) => person?.name}
         />
         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
