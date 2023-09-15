@@ -78,7 +78,14 @@ export default function ComboBoxCategory({
           type="text"
           placeholder="Enter custom category"
           value={customCategory}
-          onChange={(e) => setCustomCategory(e.target.value)}
+          onChange={(event) => {
+            const newQuery = event.target.value;
+            setQuery(newQuery);
+          
+            if (newQuery === '') {
+              setCustomCategory(null); // Aquí reseteas selectedPerson
+            }
+          }}
           className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
 
         />
