@@ -18,7 +18,6 @@ export default function ComboBoxCategory({
   const [customCategory, setCustomCategory] = useState("");
   const [customSubCategory, setCustomSubCategory] = useState("");
 
-
   useEffect(() => {
     if (selectedCategory?.name === "Add New") {
       setShowCustomCategoryField(true);
@@ -32,10 +31,10 @@ export default function ComboBoxCategory({
       setShowSubCategory(false);
     }
 
-    if (typeof onCategoryChange === 'function') {
+    if (typeof onCategoryChange === "function") {
       onCategoryChange(selectedCategory);
     }
-  }, [selectedCategory, onCategoryChange]); 
+  }, [selectedCategory, onCategoryChange]);
 
   useEffect(() => {
     if (selectedSubCategory?.name === "Add New") {
@@ -44,23 +43,28 @@ export default function ComboBoxCategory({
       setShowCustomSubCategoryField(false);
     }
 
-    if (typeof onSubCategoryChange === 'function') {
+    if (typeof onSubCategoryChange === "function") {
       onSubCategoryChange(selectedSubCategory);
     }
   }, [selectedSubCategory, onSubCategoryChange]);
 
   useEffect(() => {
-    if (selectedCategory?.name === "Add New" && typeof onCategoryChange === 'function') {
-      onCategoryChange({id: 'custom', name: customCategory});
+    if (
+      selectedCategory?.name === "Add New" &&
+      typeof onCategoryChange === "function"
+    ) {
+      onCategoryChange({ id: "custom", name: customCategory });
     }
   }, [customCategory, onCategoryChange]);
-  
+
   useEffect(() => {
-    if (selectedSubCategory?.name === "Add New" && typeof onSubCategoryChange === 'function') {
-      onSubCategoryChange({id: 'custom', name: customSubCategory});
+    if (
+      selectedSubCategory?.name === "Add New" &&
+      typeof onSubCategoryChange === "function"
+    ) {
+      onSubCategoryChange({ id: "custom", name: customSubCategory });
     }
   }, [customSubCategory, onSubCategoryChange]);
-
 
   return (
     <div>
@@ -80,14 +84,13 @@ export default function ComboBoxCategory({
           value={customCategory}
           onChange={(event) => {
             const newQuery = event.target.value;
-            setQuery(newQuery);
-          
-            if (newQuery === '') {
-              setSelectedCategory(null); // Aquí reseteas selectedPerson
+            setCustomCategory(newQuery); // Actualiza customCategory, no query
+
+            if (newQuery === "") {
+              setSelectedCategory(null);
             }
           }}
-          className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-
+          className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
       )}
       {showSubCategory && selectedCategory && (
@@ -111,8 +114,8 @@ export default function ComboBoxCategory({
           placeholder="Enter custom sub-category"
           value={customSubCategory}
           onChange={(e) => setCustomSubCategory(e.target.value)}
-          className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-          />
+          className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
       )}
     </div>
   );
@@ -164,11 +167,6 @@ function SingleComboBox({
         <Combobox.Input
           className="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           onChange={(event) => setQuery(event.target.value)}
-        onBlur={() => {
-          if (query === "") {
-            setSelectedPerson(null);
-          }
-        }}
           displayValue={(person) => person?.name}
         />
         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
