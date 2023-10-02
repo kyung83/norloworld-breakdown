@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import useAxios from "axios-hooks";
-
+import ComboBoxNumber from "./ComboBoxNumber"
 import ComboBox from "./ComboBox";
-import ComboBoxCategory from "./ComboboxCategory";
-import ComboBoxProviders from "./ComboboxProviders";
-import ComboBoxGroup from "./ComboBoxGroup";
 import Spinner from "./Spinner";
 // import ProgressBar from './ProgressBar'
 
@@ -18,15 +15,9 @@ export default function MainForm() {
   const [trailerNumber, setTrailerNumber] = useState("");
   const [selectedState, setSelectedState] = useState({});
   const [city, setCity] = useState("");
-  const [selectedProvider, setSelectedProvider] = useState({});
-  const [repairNeeded, setRepairNeeded] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
-  const [repairCategory, setRepairCategory] = useState("");
-  const [total, setTotal] = useState("");
   const [warning, setWarning] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
-  const [selectedUser, setUser] = useState({});
+  // const [selectedUser, setUser] = useState({});
 
   const [{ data, loading, error }] = useAxios(endPoint);
   const [
@@ -40,28 +31,11 @@ export default function MainForm() {
     { manual: true }
   );
 
-  const handleCategoryChange = (newCategory) => {
-    setSelectedCategory(newCategory);
-  };
-  function handleProviderChange(provider) {
-    setSelectedProvider(provider);
-}
-
-  const handleSubCategoryChange = (newSubCategory) => {
-    setSelectedSubCategory(newSubCategory);
-  };
-
-  useEffect(() => {
-    console.log("Valor actual de repairCategory:", repairCategory);
-  }, [repairCategory]);
-
   async function handleSubmit(e) {
     e.preventDefault();
     if (
       !selectedDriver ||
-      !selectedState ||
-      !selectedProvider ||
-      !selectedUser
+      !selectedState 
     ) {
       return setWarning(true);
     }
@@ -69,16 +43,11 @@ export default function MainForm() {
     const body = {
       date,
       driverName: selectedDriver.name,
-      truckNumber,
-      trailerNumber,
+      truckNumber : truckNumber.name,
+      trailerNumber : trailerNumber.name,
       stateName: selectedState.name,
       city,
-      providerName: selectedProvider,
-      repairNeeded,
-      repairCategory: selectedCategory,
-      repairSubCategory: selectedSubCategory,
-      total,
-      user: selectedUser.name,
+      user: selectedDriver.name,
     };
 
     console.log(body);
@@ -92,13 +61,7 @@ export default function MainForm() {
       setTrailerNumber("");
       setSelectedState({});
       setCity("");
-      setSelectedProvider({});
-      setRepairNeeded("");
-      setRepairCategory("");
-      setTotal("");
-      setUser({});
       setSelectedDriver({});
-      setSelectedProvider({});
       setSelectedState({});
       setSuccessMessage(true);
       setWarning(false);
@@ -107,14 +70,6 @@ export default function MainForm() {
       }, 4000);
     }
   }
-
-  const handleTotal = (e) => {
-    let value = e.target.value;
-    if (value && !value.startsWith("$")) {
-      value = "$" + value;
-    }
-    setTotal(value);
-  };
 
   if (error || postError)
     return <h2 className="text-lg text-center p-4">Error</h2>;
@@ -143,29 +98,21 @@ export default function MainForm() {
         />
 
         <div className="flex flex-col">
-          <label className="text-sm text-stone-500 file:mr-5 file:py-1 file:px-3 file:border-[1px] file:text-xs file:font-medium file:bg-stone-50 file:text-stone-700 hover:file:cursor-pointer hover:file:bg-blue-50 hover:file:text-blue-700">
-            Truck #
-          </label>
-          <input
-            type="text"
-            placeholder="Truck #"
-            value={truckNumber}
-            onChange={(e) => setTruckNumber(e.target.value)}
-            className="p-2 rounded border shadow-sm"
-          />
+        <ComboBoxNumber
+          title="* Truck #"
+          items={data.trucks.map((name, i) => ({ id: i, name }))}
+          selectedPerson={truckNumber}
+          setSelectedPerson={setTruckNumber}
+        />
         </div>
 
         <div className="flex flex-col">
-          <label className="text-sm text-stone-500 file:mr-5 file:py-1 file:px-3 file:border-[1px] file:text-xs file:font-medium file:bg-stone-50 file:text-stone-700 hover:file:cursor-pointer hover:file:bg-blue-50 hover:file:text-blue-700">
-            Trailer #
-          </label>
-          <input
-            type="text"
-            placeholder="Trailer #"
-            value={trailerNumber}
-            onChange={(e) => setTrailerNumber(e.target.value)}
-            className="p-2 rounded border shadow-sm"
-          />
+        <ComboBoxNumber
+          title="* Trailer #"
+          items={data.trailers.map((name, i) => ({ id: i, name }))}
+          selectedPerson={trailerNumber}
+          setSelectedPerson={setTrailerNumber}
+        />
         </div>
 
         <ComboBox
@@ -187,54 +134,13 @@ export default function MainForm() {
             className="p-2 rounded border shadow-sm"
           />
         </div>
-
-        <ComboBoxProviders
-          title="* Service Providers"
-          items={data.providers}
-          onCategoryChange={handleProviderChange}
-        />
-
-        <div className="flex flex-col">
-          <label className="text-sm text-stone-500 file:mr-5 file:py-1 file:px-3 file:border-[1px] file:text-xs file:font-medium file:bg-stone-50 file:text-stone-700 hover:file:cursor-pointer hover:file:bg-blue-50 hover:file:text-blue-700">
-            Repair Needed
-          </label>
-          <input
-            type="text"
-            placeholder="Repair Needed"
-            value={repairNeeded}
-            onChange={(e) => setRepairNeeded(e.target.value)}
-            className="p-2 rounded border shadow-sm"
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <ComboBoxCategory
-            title="Repair Category"
-            items={data.categories}
-            onCategoryChange={handleCategoryChange}
-            onSubCategoryChange={handleSubCategoryChange}
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <label className="text-sm text-stone-500 file:mr-5 file:py-1 file:px-3 file:border-[1px] file:text-xs file:font-medium file:bg-stone-50 file:text-stone-700 hover:file:cursor-pointer hover:file:bg-blue-50 hover:file:text-blue-700">
-            Total
-          </label>
-          <input
-            type="text"
-            placeholder="$Total"
-            value={total}
-            onChange={handleTotal}
-            className="p-2 rounded border shadow-sm"
-          />
-          <ComboBox
+          {/* <ComboBox
             title="* Sumbitted By"
             items={data.users.map((name, i) => ({ id: i, name }))}
             selectedPerson={selectedUser}
             setSelectedPerson={setUser}
-          />
+          /> */}
         </div>
-      </div>
 
       {warning && (
         <p className="text-sm text-red-600 mt-4 mb-4" id="email-error">
