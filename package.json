@@ -13,7 +13,8 @@
     "axios": "^1.4.0",
     "axios-hooks": "^4.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.16.0"
   },
   "devDependencies": {
     "@headlessui/react": "^1.7.16",
