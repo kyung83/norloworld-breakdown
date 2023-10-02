@@ -12,8 +12,8 @@ const user = {
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
 const navigation = [
-  { name: 'Breakdowns', href: '/norloworld-breakdown', current: true },
-  { name: 'Status', href: '/norloworld-breakdown/status', current: false },
+  { name: 'Breakdowns', href: '/', current: true },
+  { name: 'Status', href: 'status', current: false },
 ]
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
@@ -194,7 +194,7 @@ export default function App() {
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col flex-1 w-full">
                 <Routes>
                   <Route path="/" exact element={<MainForm/>} />
-                  <Route path="/status" element={<StatusComponent/>} />
+                  <Route path="status" element={<StatusComponent/>} />
                   {/* Añade más rutas según lo necesites */}
                 </Routes>
               </div>
