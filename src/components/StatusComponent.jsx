@@ -112,8 +112,7 @@ export default function StatusComponent() {
                 />
             </div>
             <ToastContainer />
-            <h1>Breakdowns:</h1>
-            <div style={{ height: 400, width: '80%', display: 'flex', justifyContent: 'center' }}>
+            <div style={{ height: 400, width: '100%', display: 'flex', justifyContent: 'center' }}>
                 <DataGrid
                     rows={breakdowns}
                     columns={columns}
