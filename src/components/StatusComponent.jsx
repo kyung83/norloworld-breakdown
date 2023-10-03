@@ -5,6 +5,7 @@ import Spinner from "./Spinner";
 import { DataGrid } from '@mui/x-data-grid';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from 'react-router-dom';
 
 const endPoint =
     "https://script.google.com/macros/s/AKfycbxQvcen9VHd-lysj7SjmT5Vj5PWqUUMmP2n--SCgOIXc57YKvR7mdR9KioNNqnIetyk/exec";
@@ -66,6 +67,8 @@ export default function StatusComponent() {
         },
     ];
 
+    const navigate = useNavigate();
+
     const handleSetArrived = async (selectedBreakdown) => {
         try {
           const response = await executePost({
@@ -78,8 +81,8 @@ export default function StatusComponent() {
       
             // Recarga la página después de 2 segundos
             setTimeout(() => {
-              window.location.reload();
-            }, 2000); // 2000 milisegundos (2 segundos)
+  navigate('/norloworld-breakdown/');
+}, 2000); 
           } else {
             console.error("Set Arrived failed");
             toast.error("Set Arrived failed"); // Muestra una notificación de error
