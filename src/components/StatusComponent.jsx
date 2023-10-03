@@ -82,7 +82,7 @@ export default function StatusComponent() {
             // Recarga la página después de 2 segundos
             setTimeout(() => {
   navigate('/norloworld-breakdown/');
-}, 2000); 
+}, 4000); 
           } else {
             console.error("Set Arrived failed");
             toast.error("Set Arrived failed"); // Muestra una notificación de error
