@@ -27,6 +27,7 @@ export default function StatusComponent() {
     const [selectedDriver, setSelectedDriver] = useState({});
     const [warning, setWarning] = useState(false);
 
+        
     useEffect(() => {
         if (selectedDriver.name && data.breakdownsOpen) {
             const driverBreakdowns = data.breakdownsOpen.filter(breakdown => breakdown.data[2] === selectedDriver.name);

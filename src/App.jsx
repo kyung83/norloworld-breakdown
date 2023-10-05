@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 import { MainForm, StatusComponent } from "./components"
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Routes, HashRouter } from 'react-router-dom';
 
 
 const user = {
@@ -27,7 +27,7 @@ function classNames(...classes) {
 
 export default function App() {
   return (
-    <Router>
+    <HashRouter>
 
         <div className="flex flex-col flex-1">
       <Disclosure as="nav" className="border-b border-gray-200 bg-white">
@@ -201,7 +201,7 @@ export default function App() {
             </main>
           </div>
         </div>
-    </Router>
+    </HashRouter>
   )
 }
 

@@ -4,5 +4,5 @@ import react from '@vitejs/plugin-react-swc'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/norloworld-breakdown/' 
+  base: '/norloworld-breakdown/#/norloworld-breakdown/' 
 })
