@@ -15,10 +15,7 @@ const navigation = [
   { name: 'Breakdowns', href: '/norloworld-breakdown/', current: true },
   { name: 'Status', href: '/norloworld-breakdown/status', current: false },
 ]
-const navigationMobile = [
-  { name: 'Breakdowns', href: '#/norloworld-breakdown/', current: true },
-  { name: 'Status', href: '#/norloworld-breakdown/status', current: false },
-]
+
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
   { name: 'Settings', href: '#' },
@@ -29,17 +26,9 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-
-function isMobileDevice() {
-  return window.innerWidth <= 768; // Puedes ajustar este valor según tus necesidades
-}
-
-const currentNavigation = isMobileDevice() ? navigationMobile : navigation;
-
-
 export default function App() {
   return (
-    <HashRouter >
+    <HashRouter>
 
         <div className="flex flex-col flex-1">
       <Disclosure as="nav" className="border-b border-gray-200 bg-white">
@@ -61,7 +50,7 @@ export default function App() {
                       />
                     </div>
                     <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
-                      {currentNavigation.map((item) => (
+                      {navigation.map((item) => (
                         <Link
                           key={item.name}
                           to={item.href}
@@ -143,21 +132,21 @@ export default function App() {
 
               <Disclosure.Panel className="sm:hidden">
                 <div className="space-y-1 pb-3 pt-2">
-                  {currentNavigation.map((item) => (
+                  {navigation.map((item) => (
                     <Disclosure.Button
-                      key={item.name}
-                      as="a"
-                      href={item.href}
-                      className={classNames(
+                    as={Link}
+                    key={item.name}
+                    to={item.href}
+                    className={classNames(
                         item.current
-                          ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
-                          : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800',
+                            ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
+                            : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800',
                         'block border-l-4 py-2 pl-3 pr-4 text-base font-medium'
-                      )}
-                      aria-current={item.current ? 'page' : undefined}
-                    >
-                      {item.name}
-                    </Disclosure.Button>
+                    )}
+                    aria-current={item.current ? 'page' : undefined}
+                >
+                    {item.name}
+                </Disclosure.Button>                
                   ))}
                 </div>
                 <div className="border-t border-gray-200 pb-3 pt-4">
@@ -181,13 +170,14 @@ export default function App() {
                   <div className="mt-3 space-y-1">
                     {userNavigation.map((item) => (
                       <Disclosure.Button
-                        key={item.name}
-                        as="a"
-                        href={item.href}
-                        className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                      >
-                        {item.name}
-                      </Disclosure.Button>
+                      key={item.name}
+                      as={Link}
+                      to={item.href}
+                      className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                  >
+                      {item.name}
+                  </Disclosure.Button>
+                  
                     ))}
                   </div>
                 </div>
