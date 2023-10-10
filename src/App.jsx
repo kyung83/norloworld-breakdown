@@ -12,6 +12,10 @@ const user = {
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
 const navigation = [
+  { name: 'Breakdowns', href: '/norloworld-breakdown/', current: true },
+  { name: 'Status', href: '/norloworld-breakdown/status', current: false },
+]
+const navigationMobile = [
   { name: 'Breakdowns', href: '#/norloworld-breakdown/', current: true },
   { name: 'Status', href: '#/norloworld-breakdown/status', current: false },
 ]
@@ -24,6 +28,14 @@ const userNavigation = [
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
+
+
+function isMobileDevice() {
+  return window.innerWidth <= 768; // Puedes ajustar este valor según tus necesidades
+}
+
+const currentNavigation = isMobileDevice() ? navigationMobile : navigation;
+
 
 export default function App() {
   return (
@@ -49,7 +61,7 @@ export default function App() {
                       />
                     </div>
                     <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
-                      {navigation.map((item) => (
+                      {currentNavigation.map((item) => (
                         <Link
                           key={item.name}
                           to={item.href}
@@ -131,7 +143,7 @@ export default function App() {
 
               <Disclosure.Panel className="sm:hidden">
                 <div className="space-y-1 pb-3 pt-2">
-                  {navigation.map((item) => (
+                  {currentNavigation.map((item) => (
                     <Disclosure.Button
                       key={item.name}
                       as="a"
