@@ -38,7 +38,9 @@ export default function StatusComponent() {
                 truck: breakdown.data[3],
                 trailer: breakdown.data[4],
                 state: breakdown.data[5],
-                city: breakdown.data[6]
+                city: breakdown.data[6],
+                serviceProvider : breakdown.data[14],
+                phoneNumber : breakdown.data[15]
             }));
 
             setBreakdowns(breakdownsForName);
@@ -53,6 +55,8 @@ export default function StatusComponent() {
         { field: 'trailer', headerName: 'Trailer #', width: 100 },
         { field: 'state', headerName: 'State', width: 100 },
         { field: 'city', headerName: 'City', width: 200 },
+        { field: 'serviceProvider', headerName: 'Service Provider', width: 200 },
+        { field: 'phoneNumber', headerName: 'Phone Number', width: 200 },
         {
             field: 'setArrived',
             headerName: 'Set Arrived',
