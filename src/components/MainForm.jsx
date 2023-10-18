@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import useAxios from "axios-hooks";
 import ComboBoxNumber from "./ComboBoxNumber"
 import ComboBox from "./ComboBox";
 import Spinner from "./Spinner";
+import TextAreaSize from "./TextArea";
 // import ProgressBar from './ProgressBar'
 
 const endPoint =
@@ -14,9 +15,11 @@ export default function MainForm() {
   const [truckNumber, setTruckNumber] = useState("");
   const [trailerNumber, setTrailerNumber] = useState("");
   const [selectedState, setSelectedState] = useState({});
+  const [selectedRepairType, setSelectedRepairType] = useState({})
   const [city, setCity] = useState("");
   const [warning, setWarning] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
+  const textAreaRef = useRef();
   // const [selectedUser, setUser] = useState({});
 
   const [{ data, loading, error }] = useAxios(endPoint);
@@ -35,19 +38,25 @@ export default function MainForm() {
     e.preventDefault();
     if (
       !selectedDriver ||
-      !selectedState 
+      !selectedState
     ) {
       return setWarning(true);
     }
 
+    console.log(textAreaRef)
+
+    const textAreaValue = textAreaRef.current.value;
+
     const body = {
       date,
       driverName: selectedDriver.name,
-      truckNumber : truckNumber.name,
-      trailerNumber : trailerNumber.name,
+      truckNumber: truckNumber.name,
+      trailerNumber: trailerNumber.name,
       stateName: selectedState.name,
       city,
+      repairType: selectedRepairType.name,
       user: selectedDriver.name,
+      description: textAreaValue,
     };
 
     console.log(body);
@@ -65,6 +74,7 @@ export default function MainForm() {
       setSelectedState({});
       setSuccessMessage(true);
       setWarning(false);
+      setSelectedRepairType({})
       setTimeout(() => {
         setSuccessMessage(false);
       }, 4000);
@@ -75,6 +85,8 @@ export default function MainForm() {
     return <h2 className="text-lg text-center p-4">Error</h2>;
   if (loading || postLoading) return <Spinner />;
 
+
+  console.log(data)
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       <div className="space-y-4">
@@ -98,21 +110,21 @@ export default function MainForm() {
         />
 
         <div className="flex flex-col">
-        <ComboBoxNumber
-          title="* Truck #"
-          items={data.trucks.map((name, i) => ({ id: i, name }))}
-          selectedPerson={truckNumber}
-          setSelectedPerson={setTruckNumber}
-        />
+          <ComboBoxNumber
+            title="* Truck #"
+            items={data.trucks.map((name, i) => ({ id: i, name }))}
+            selectedPerson={truckNumber}
+            setSelectedPerson={setTruckNumber}
+          />
         </div>
 
         <div className="flex flex-col">
-        <ComboBoxNumber
-          title="* Trailer #"
-          items={data.trailers.map((name, i) => ({ id: i, name }))}
-          selectedPerson={trailerNumber}
-          setSelectedPerson={setTrailerNumber}
-        />
+          <ComboBoxNumber
+            title="* Trailer #"
+            items={data.trailers.map((name, i) => ({ id: i, name }))}
+            selectedPerson={trailerNumber}
+            setSelectedPerson={setTrailerNumber}
+          />
         </div>
 
         <ComboBox
@@ -134,13 +146,15 @@ export default function MainForm() {
             className="p-2 rounded border shadow-sm"
           />
         </div>
-          {/* <ComboBox
-            title="* Sumbitted By"
-            items={data.users.map((name, i) => ({ id: i, name }))}
-            selectedPerson={selectedUser}
-            setSelectedPerson={setUser}
-          /> */}
-        </div>
+        <ComboBox
+          title="* Repair Type"
+          items={data.repairTypes.map((name, i) => ({ id: i, name }))}
+          selectedPerson={selectedRepairType}
+          setSelectedPerson={setSelectedRepairType}
+        />
+
+        <TextAreaSize textAreaRef={textAreaRef} />
+      </div>
 
       {warning && (
         <p className="text-sm text-red-600 mt-4 mb-4" id="email-error">
@@ -191,14 +205,14 @@ export default function MainForm() {
         </div>
       )}
       {/* <ProgressBar progress={percentage} /> */}
-      <button
-        type="submit"
-        className={`${
-          !warning && "mt-4"
-        } rounded-md bg-emerald-700 px-12 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500`}
-      >
-        Submit
-      </button>
+      <div className="flex justify-center items-center">
+        <button
+          type="submit"
+          className={`${!warning && "mt-4"} rounded-md bg-emerald-700 px-12 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500`}
+        >
+          Submit
+        </button>
+      </div>
     </form>
   );
 }
