@@ -49,14 +49,14 @@ export default function StatusComponent() {
     }, [selectedDriver, data]);
 
     const columns = [
-        { field: 'breakdownDate', headerName: 'Breakdown Date', width: 200 },
+        { field: 'breakdownDate', headerName: 'Breakdown Date', width: 120 },
         { field: 'driver', headerName: 'Driver', width: 200 },
-        { field: 'truck', headerName: 'Truck #', width: 100 },
-        { field: 'trailer', headerName: 'Trailer #', width: 100 },
-        { field: 'state', headerName: 'State', width: 100 },
-        { field: 'city', headerName: 'City', width: 200 },
-        { field: 'serviceProvider', headerName: 'Service Provider', width: 200 },
-        { field: 'phoneNumber', headerName: 'Phone Number', width: 200 },
+        { field: 'truck', headerName: 'Truck #', width: 70 },
+        { field: 'trailer', headerName: 'Trailer #', width: 70 },
+        { field: 'state', headerName: 'State', width: 70 },
+        { field: 'city', headerName: 'City', width: 70 },
+        { field: 'serviceProvider', headerName: 'Service Provider', width: 150 },
+        { field: 'phoneNumber', headerName: 'Phone Number', width: 150 },
         {
             field: 'setArrived',
             headerName: 'Set Arrived',
