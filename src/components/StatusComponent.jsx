@@ -31,18 +31,26 @@ export default function StatusComponent() {
     useEffect(() => {
         if (selectedDriver.name && data.breakdownsOpen) {
             const driverBreakdowns = data.breakdownsOpen.filter(breakdown => breakdown.data[2] === selectedDriver.name);
-            const breakdownsForName = driverBreakdowns.map((breakdown, idx) => ({
-                id: breakdown.row.toString(),
-                breakdownDate: breakdown.data[1],
-                driver: breakdown.data[2],
-                truck: breakdown.data[3],
-                trailer: breakdown.data[4],
-                state: breakdown.data[5],
-                city: breakdown.data[6],
-                serviceProvider : breakdown.data[14],
-                phoneNumber : breakdown.data[15]
-            }));
-
+            const breakdownsForName = driverBreakdowns.map((breakdown, idx) => {
+                const fechaOriginal = breakdown.data[1];
+                const fechaParseada = new Date(fechaOriginal);
+                const dia = fechaParseada.getDate();
+                const mes = fechaParseada.getMonth() + 1;
+                const año = fechaParseada.getFullYear();
+                const fechaFormateada = `${año}/${mes}/${dia}`;
+    
+                return {
+                    id: breakdown.row.toString(),
+                    breakdownDate: fechaFormateada, 
+                    driver: breakdown.data[2],
+                    truck: breakdown.data[3],
+                    trailer: breakdown.data[4],
+                    state: breakdown.data[5],
+                    city: breakdown.data[6],
+                    serviceProvider: breakdown.data[14],
+                    phoneNumber: breakdown.data[15]
+                };
+            });
             setBreakdowns(breakdownsForName);
             setSelectedName(selectedDriver.name);
         }
