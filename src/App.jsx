@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 import { MainForm, StatusComponent } from "./components"
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { BrowserRouter as Router, Route, Link, Routes, HashRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Routes, HashRouter, useLocation } from 'react-router-dom';
 
 
 const user = {
@@ -26,10 +26,9 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function App() {
+function MainContent() {
+  const location = useLocation();
   return (
-    <HashRouter>
-
         <div className="flex flex-col flex-1">
       <Disclosure as="nav" className="border-b border-gray-200 bg-white">
          {({ open }) => (
@@ -50,21 +49,24 @@ export default function App() {
                       />
                     </div>
                     <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
-                      {navigation.map((item) => (
-                        <Link
-                          key={item.name}
-                          to={item.href}
-                          className={classNames(
-                            item.current
-                              ? 'border-indigo-500 text-gray-900'
-                              : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                            'inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium'
-                          )}
-                          aria-current={item.current ? 'page' : undefined}
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
+                    {navigation.map((item) => {
+                    const isActive = location.pathname === item.href;
+                    return (
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        className={classNames(
+                          isActive
+                            ? "border-indigo-500 text-gray-900"
+                            : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                          "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium"
+                        )}
+                        aria-current={isActive ? "page" : undefined}
+                      >
+                        {item.name}
+                      </Link>
+                    );
+                  })}
                     </div>
                   </div>
                   <div className="hidden sm:ml-6 sm:flex sm:items-center">
@@ -97,17 +99,17 @@ export default function App() {
                       >
                         <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                           {userNavigation.map((item) => (
-                            <Menu.Item key={item.name}>
-                              {({ active }) => (
-                                <Link
-                                  to={item.href}
-                                  className={classNames(
-                                    active ? 'bg-gray-100' : '',
-                                    'block px-4 py-2 text-sm text-gray-700'
-                                  )}
-                                >
-                                  {item.name}
-                                </Link>
+                             <Menu.Item key={item.name}>
+                             {({ active }) => (
+                               <Link
+                                 to={item.href}
+                                 className={classNames(
+                                   active ? "bg-gray-100" : "",
+                                   "block px-4 py-2 text-sm text-gray-700"
+                                 )}
+                               >
+                                 {item.name}
+                               </Link>
                               )}
                             </Menu.Item>
                           ))}
@@ -132,22 +134,25 @@ export default function App() {
 
               <Disclosure.Panel className="sm:hidden">
                 <div className="space-y-1 pb-3 pt-2">
-                  {navigation.map((item) => (
-                    <Disclosure.Button
+                {navigation.map((item) => {
+                const isActive = location.pathname === item.href;
+                return (
+                  <Disclosure.Button
                     as={Link}
                     key={item.name}
                     to={item.href}
                     className={classNames(
-                        item.current
-                            ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
-                            : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800',
-                        'block border-l-4 py-2 pl-3 pr-4 text-base font-medium'
+                      isActive
+                        ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                        : "border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800",
+                      "block border-l-4 py-2 pl-3 pr-4 text-base font-medium"
                     )}
-                    aria-current={item.current ? 'page' : undefined}
-                >
+                    aria-current={isActive ? "page" : undefined}
+                  >
                     {item.name}
-                </Disclosure.Button>                
-                  ))}
+                  </Disclosure.Button>
+                );
+              })}
                 </div>
                 <div className="border-t border-gray-200 pb-3 pt-4">
                   <div className="flex items-center px-4">
@@ -203,7 +208,15 @@ export default function App() {
             </main>
           </div>
         </div>
-    </HashRouter>
   )
 }
 
+
+
+export default function App() {
+  return (
+    <HashRouter>
+      <MainContent />
+    </HashRouter>
+  );
+}

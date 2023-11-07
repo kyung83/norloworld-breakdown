@@ -17,6 +17,7 @@ export default function ComboBox({
   title,
   selectedPerson,
   setSelectedPerson,
+  isInvalid = false,
 }) {
   const [query, setQuery] = useState("");
 
@@ -27,7 +28,6 @@ export default function ComboBox({
           return person.name.toLowerCase().includes(query.toLowerCase());
         });
 
-      
   return (
     <Combobox
       as="div"
@@ -40,12 +40,14 @@ export default function ComboBox({
       </Combobox.Label>
       <div className="relative mt-2">
         <Combobox.Input
-          className="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          className={`w-full rounded-md bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm sm:text-sm sm:leading-6 ${
+            isInvalid ? "border-red-500" : "border-gray-300"
+          }`}
           onChange={(event) => {
             const newQuery = event.target.value;
             setQuery(newQuery);
-          
-            if (newQuery === '') {
+
+            if (newQuery === "") {
               setSelectedPerson(null); // Aquí reseteas selectedPerson
             }
           }}

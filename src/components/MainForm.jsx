@@ -19,6 +19,7 @@ export default function MainForm() {
   const [city, setCity] = useState("");
   const [warning, setWarning] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
+  const [invalidFields, setInvalidFields] = useState({});
   const textAreaRef = useRef();
   // const [selectedUser, setUser] = useState({});
 
@@ -36,11 +37,21 @@ export default function MainForm() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (
-      !selectedDriver ||
-      !selectedState
-    ) {
-      return setWarning(true);
+
+    let newInvalidFields = {};
+
+    if (!selectedDriver.name) newInvalidFields['driver'] = true;
+    if (!date) newInvalidFields['date'] = true;
+    if (!truckNumber) newInvalidFields['truckNumber'] = true; 
+    if (!trailerNumber) newInvalidFields['trailerNumber'] = true; 
+    if (!selectedState.name) newInvalidFields['state'] = true;
+    if (!city) newInvalidFields['city'] = true;
+    if (!selectedRepairType.name) newInvalidFields['repairType'] = true;
+  
+    if (Object.keys(newInvalidFields).length > 0) {
+      setInvalidFields(newInvalidFields);
+      setWarning(true);
+      return;
     }
 
     console.log(textAreaRef)
@@ -64,6 +75,7 @@ export default function MainForm() {
       data: JSON.stringify(body),
     });
     if (response) {
+      setInvalidFields({});
       setSelectedDriver({});
       setDate(null);
       setTruckNumber("");
@@ -89,78 +101,6 @@ export default function MainForm() {
   console.log(data)
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      <div className="space-y-4">
-        <div className="flex flex-col">
-          <label className="text-sm text-stone-500 file:mr-5 file:py-1 file:px-3 file:border-[1px] file:text-xs file:font-medium file:bg-stone-50 file:text-stone-700 hover:file:cursor-pointer hover:file:bg-blue-50 hover:file:text-blue-700">
-            Date
-          </label>
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="p-2 rounded border shadow-sm"
-          />
-        </div>
-
-        <ComboBox
-          title="* Driver Name"
-          items={data.drivers.map((name, i) => ({ id: i, name }))}
-          selectedPerson={selectedDriver}
-          setSelectedPerson={setSelectedDriver}
-        />
-
-        <div className="flex flex-col">
-          <ComboBoxNumber
-            title="* Truck #"
-            items={data.trucks.map((name, i) => ({ id: i, name }))}
-            selectedPerson={truckNumber}
-            setSelectedPerson={setTruckNumber}
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <ComboBoxNumber
-            title="* Trailer #"
-            items={data.trailers.map((name, i) => ({ id: i, name }))}
-            selectedPerson={trailerNumber}
-            setSelectedPerson={setTrailerNumber}
-          />
-        </div>
-
-        <ComboBox
-          title="* State"
-          items={data.states.map((name, i) => ({ id: i, name }))}
-          selectedPerson={selectedState}
-          setSelectedPerson={setSelectedState}
-        />
-
-        <div className="flex flex-col">
-          <label className="text-sm text-stone-500 file:mr-5 file:py-1 file:px-3 file:border-[1px] file:text-xs file:font-medium file:bg-stone-50 file:text-stone-700 hover:file:cursor-pointer hover:file:bg-blue-50 hover:file:text-blue-700">
-            City
-          </label>
-          <input
-            type="text"
-            placeholder="City"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            className="p-2 rounded border shadow-sm"
-          />
-        </div>
-        <ComboBox
-          title="* Repair Type"
-          items={data.repairTypes.map((name, i) => ({ id: i, name }))}
-          selectedPerson={selectedRepairType}
-          setSelectedPerson={setSelectedRepairType}
-        />
-
-        <TextAreaSize textAreaRef={textAreaRef} />
-      </div>
-
-      {warning && (
-        <p className="text-sm text-red-600 mt-4 mb-4" id="email-error">
-          Complete the required fields *
-        </p>
-      )}
       {successMessage && (
         <div className="rounded-md bg-green-50 p-4 my-4" id="message">
           <div className="flex">
@@ -203,6 +143,83 @@ export default function MainForm() {
             </div>
           </div>
         </div>
+      )}
+
+      <div className="space-y-4">
+        <div className="flex flex-col">
+          <label className="block text-sm font-medium leading-6 text-gray-900">
+          * Date
+          </label>
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className={`mt-1 block w-full pl-3 pr-10 py-2 text-base rounded-md shadow-sm focus:outline-none ${invalidFields.date ? 'border-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'} sm:text-sm`}
+            />
+        </div>
+
+        <ComboBox
+          title="* Driver Name"
+          items={data.drivers.map((name, i) => ({ id: i, name }))}
+          selectedPerson={selectedDriver}
+          setSelectedPerson={setSelectedDriver}
+          isInvalid={invalidFields.driver}
+        />
+
+        <div className="flex flex-col">
+          <ComboBoxNumber
+            title="* Truck #"
+            items={data.trucks.map((name, i) => ({ id: i, name }))}
+            selectedPerson={truckNumber}
+            setSelectedPerson={setTruckNumber}
+            isInvalid={invalidFields.truckNumber}
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <ComboBoxNumber
+            title="* Trailer #"
+            items={data.trailers.map((name, i) => ({ id: i, name }))}
+            selectedPerson={trailerNumber}
+            setSelectedPerson={setTrailerNumber}
+            isInvalid={invalidFields.trailerNumber}
+          />
+        </div>
+
+        <ComboBox
+          title="* State"
+          items={data.states.map((name, i) => ({ id: i, name }))}
+          selectedPerson={selectedState}
+          setSelectedPerson={setSelectedState}
+          isInvalid={invalidFields.state}
+        />
+
+        <div className="flex flex-col">
+        <label className="block text-sm font-medium leading-6 text-gray-900">
+          * City
+          </label>
+          <input
+            type="text"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            className={`mt-1 block w-full pl-3 pr-10 py-2 text-base rounded-md shadow-sm focus:outline-none ${invalidFields.city ? 'border-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'} sm:text-sm`}
+            />
+        </div>
+        <ComboBox
+          title="* Repair Type"
+          items={data.repairTypes.map((name, i) => ({ id: i, name }))}
+          selectedPerson={selectedRepairType}
+          setSelectedPerson={setSelectedRepairType}
+          isInvalid={invalidFields.repairType}
+        />
+
+        <TextAreaSize textAreaRef={textAreaRef} />
+      </div>
+
+      {warning && (
+        <p className="text-sm text-red-600 mt-4 mb-4" id="email-error">
+          Complete the required fields *
+        </p>
       )}
       {/* <ProgressBar progress={percentage} /> */}
       <div className="flex justify-center items-center">
