@@ -110,7 +110,7 @@ export default function StatusComponent() {
     if (loading) return <Spinner />;
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh' }}>
             {warning && (
                 <p className="text-sm text-red-600 mt-4 mb-4" id="email-error">
                     Complete the required fields *
