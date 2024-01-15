@@ -26,6 +26,16 @@ export default function StatusComponent() {
     const [breakdowns, setBreakdowns] = useState([]);
     const [selectedDriver, setSelectedDriver] = useState({});
     const [warning, setWarning] = useState(false);
+    const [
+        { data: postRolling, loading: postRollingLoading, error: postErrorLoading },
+        executePostRolling,
+      ] = useAxios(
+        {
+          url: endPoint + "?route=setRolling",
+          method: "POST",
+        },
+        { manual: true }
+      );
 
         
     useEffect(() => {
@@ -57,14 +67,27 @@ export default function StatusComponent() {
     }, [selectedDriver, data]);
 
     const columns = [
-        { field: 'breakdownDate', headerName: 'Breakdown Date', width: 120 },
-        { field: 'driver', headerName: 'Driver', width: 200 },
+        { field: 'breakdownDate', headerName: 'Breakdown Date', width: 120},
+        { field: 'driver', headerName: 'Driver', width: 150 },
         { field: 'truck', headerName: 'Truck #', width: 70 },
         { field: 'trailer', headerName: 'Trailer #', width: 70 },
         { field: 'state', headerName: 'State', width: 70 },
         { field: 'city', headerName: 'City', width: 70 },
         { field: 'serviceProvider', headerName: 'Service Provider', width: 150 },
         { field: 'phoneNumber', headerName: 'Phone Number', width: 150 },
+        {
+            field: 'rolling',
+            headerName: 'Rolling',
+            width: 150,
+            renderCell: (params) => (
+                <button
+                    onClick={() => handleRolling(params.row)}
+                    className="rounded-md bg-emerald-700 px-6 py-1 text-sm font-semibold text-white shadow-sm hover:bg-emerald-400"
+                >
+                    Rolling
+                </button>
+            ),
+        },
         {
             field: 'setArrived',
             headerName: 'Set Arrived',
@@ -99,6 +122,30 @@ export default function StatusComponent() {
           } else {
             console.error("Set Arrived failed");
             toast.error("Set Arrived failed"); // Muestra una notificación de error
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          toast.error("Error occurred"); // Muestra una notificación de error
+        }
+      };
+
+      const handleRolling = async (selectedBreakdown) => {
+        try {
+          const response = await executePostRolling({
+            data: JSON.stringify(selectedBreakdown),
+          });
+          if (response.status === 200) {
+            // La solicitud fue exitosa
+            console.log("Set Rolling successful");
+            toast.success("Set Rolling successful"); // Muestra una notificación de éxito
+      
+            // Recarga la página después de 2 segundos
+            setTimeout(() => {
+  navigate('/norloworld-breakdown/');
+}, 4000); 
+          } else {
+            console.error("Set Rolling failed");
+            toast.error("Set Rolling failed"); // Muestra una notificación de error
           }
         } catch (error) {
           console.error("Error:", error);

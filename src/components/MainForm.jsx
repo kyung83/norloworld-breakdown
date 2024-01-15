@@ -9,6 +9,16 @@ import TextAreaSize from "./TextArea";
 const endPoint =
   "https://script.google.com/macros/s/AKfycbxQvcen9VHd-lysj7SjmT5Vj5PWqUUMmP2n--SCgOIXc57YKvR7mdR9KioNNqnIetyk/exec";
 
+  const readFileAsBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result.split(",")[1]);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+  
+
 export default function MainForm() {
   const [selectedDriver, setSelectedDriver] = useState({});
   const [date, setDate] = useState(null);
@@ -16,6 +26,7 @@ export default function MainForm() {
   const [trailerNumber, setTrailerNumber] = useState("");
   const [selectedState, setSelectedState] = useState({});
   const [selectedRepairType, setSelectedRepairType] = useState({})
+  const [fileData, setFileData] = useState(null);
   const [city, setCity] = useState("");
   const [warning, setWarning] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
@@ -34,6 +45,23 @@ export default function MainForm() {
     },
     { manual: true }
   );
+
+  const handleFileChange = async (event) => {
+    const files = event.target.files;
+    const allFileData = [];
+  
+    for (let i = 0; i < files.length; i++) {
+      const myFile = files[i];
+      if (myFile) {
+        const contentBase64String = await readFileAsBase64(myFile);
+        const contentType = myFile.type;
+        const fileName = myFile.name;
+        const file = { content: contentBase64String, contentType, fileName };
+        allFileData.push(file);
+      }
+    }
+    setFileData(allFileData);
+  };
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -68,6 +96,7 @@ export default function MainForm() {
       repairType: selectedRepairType.name,
       user: selectedDriver.name,
       description: textAreaValue,
+      file: fileData,
     };
 
     console.log(body);
@@ -81,6 +110,7 @@ export default function MainForm() {
       setTruckNumber("");
       setTrailerNumber("");
       setSelectedState({});
+      setFileData(null);
       setCity("");
       setSelectedDriver({});
       setSelectedState({});
@@ -214,8 +244,24 @@ export default function MainForm() {
         />
 
         <TextAreaSize textAreaRef={textAreaRef} />
-      </div>
-
+        <div className="my-4">
+            <label
+              htmlFor="file"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Attachment upload
+            </label>
+            <div className="mt-2">
+              <input
+                type="file"
+                id="inputfile"
+                onChange={handleFileChange}
+                multiple 
+                className="text-sm text-stone-500 file:mr-5 file:py-1 file:px-3 file:border-[1px] file:text-xs file:font-medium file:bg-stone-50 file:text-stone-700 hover:file:cursor-pointer hover:file:bg-blue-50 hover:file:text-blue-700"
+              />
+            </div>
+          </div>
+          </div>
       {warning && (
         <p className="text-sm text-red-600 mt-4 mb-4" id="email-error">
           Complete the required fields *
