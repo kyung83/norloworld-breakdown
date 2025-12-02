@@ -7,7 +7,7 @@ import TextAreaSize from "./TextArea";
 // import ProgressBar from './ProgressBar'
 
 const endPoint =
-  "https://script.google.com/macros/s/AKfycbxQvcen9VHd-lysj7SjmT5Vj5PWqUUMmP2n--SCgOIXc57YKvR7mdR9KioNNqnIetyk/exec";
+  "https://script.google.com/macros/s/AKfycbzbI77LjyY_XlFjR-8Zll-gpJ9IAwCY4ukkBeSUh74SOee_fG5yOLM5IpsnfHZob8W7/exec";
 
   const readFileAsBase64 = (file) => {
     return new Promise((resolve, reject) => {
