@@ -34,7 +34,13 @@ export default function MainForm() {
   const textAreaRef = useRef();
   // const [selectedUser, setUser] = useState({});
 
-  const [{ data, loading, error }] = useAxios(endPoint);
+const [{ data: rawData, loading, error }] = useAxios({
+  url: endPoint + "?route=getBreakdowns",
+  method: "GET",
+  responseType: "text"
+});
+const data = rawData ? JSON.parse(rawData) : {};
+
   const [
     { data: postData, loading: postLoading, error: postError },
     executePost,
