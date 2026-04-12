@@ -35,13 +35,13 @@ export default function ComboBoxNumber({
       onChange={setSelectedPerson}
       className="mb-4"
     >
-      <Combobox.Label className="block text-sm font-medium leading-6 text-gray-900">
+      <Combobox.Label className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-100">
         {title}
       </Combobox.Label>
       <div className="relative mt-2">
         <Combobox.Input
-          className={`w-full rounded-md bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm sm:text-sm sm:leading-6 ${
-            isInvalid ? "border-red-500" : "border-gray-300"
+          className={`w-full rounded-md bg-white dark:bg-gray-700 py-1.5 pl-3 pr-10 text-gray-900 dark:text-gray-100 shadow-sm sm:text-sm sm:leading-6 ${
+            isInvalid ? "border-red-500" : "border-gray-300 dark:border-gray-600"
           }`}
           onChange={(event) => {
             const newQuery = event.target.value;
@@ -69,7 +69,7 @@ export default function ComboBoxNumber({
         </Combobox.Button>
 
         {filteredPeople.length > 0 && (
-          <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+          <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
             {filteredPeople.map((person) => (
               <Combobox.Option
                 key={person.id}
@@ -77,7 +77,7 @@ export default function ComboBoxNumber({
                 className={({ active }) =>
                   classNames(
                     "relative cursor-default select-none py-2 pl-3 pr-9 optionclass", // Agrega tu clase aquí
-                    active ? "bg-indigo-600 text-white" : "text-gray-900"
+                    active ? "bg-indigo-600 text-white" : "text-gray-900 dark:text-gray-100"
                   )
                 }
               >

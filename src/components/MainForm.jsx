@@ -7,7 +7,7 @@ import TextAreaSize from "./TextArea";
 // import ProgressBar from './ProgressBar'
 
 const endPoint =
-  "https://script.google.com/macros/s/AKfycbxd5pJ5hM5tTsYaZMrIkgi5zu7TxFBgG0-Tg_0xgiR47smICy7Fe_jRkA5Up-Mnw3PmbA/exec";
+  "https://script.google.com/macros/s/AKfycbxd5pJ5hM5tTsYaZMrIkjG5zu7TxFBgG0-Tg_0xgiR47smICy7Fe_jRKA5Up-Mnw3PmbA/exec";
 
   const readFileAsBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -183,14 +183,14 @@ const data = rawData ? JSON.parse(rawData) : {};
 
       <div className="space-y-4">
         <div className="flex flex-col">
-          <label className="block text-sm font-medium leading-6 text-gray-900">
+          <label className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-100">
           * Date
           </label>
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className={`mt-1 block w-full pl-3 pr-10 py-2 text-base rounded-md shadow-sm focus:outline-none ${invalidFields.date ? 'border-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'} sm:text-sm`}
+            className={`mt-1 block w-full pl-3 pr-10 py-2 text-base rounded-md shadow-sm focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 ${invalidFields.date ? 'border-red-500' : 'border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500'} sm:text-sm`}
             />
         </div>
 
@@ -231,14 +231,14 @@ const data = rawData ? JSON.parse(rawData) : {};
         />
 
         <div className="flex flex-col">
-        <label className="block text-sm font-medium leading-6 text-gray-900">
+        <label className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-100">
           * City
           </label>
           <input
             type="text"
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            className={`mt-1 block w-full pl-3 pr-10 py-2 text-base rounded-md shadow-sm focus:outline-none ${invalidFields.city ? 'border-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'} sm:text-sm`}
+            className={`mt-1 block w-full pl-3 pr-10 py-2 text-base rounded-md shadow-sm focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 ${invalidFields.city ? 'border-red-500' : 'border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500'} sm:text-sm`}
             />
         </div>
         <ComboBox
@@ -253,7 +253,7 @@ const data = rawData ? JSON.parse(rawData) : {};
         <div className="my-4">
             <label
               htmlFor="file"
-              className="block text-sm font-medium leading-6 text-gray-900"
+              className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-100"
             >
               Attachment upload
             </label>

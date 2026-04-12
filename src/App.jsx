@@ -30,7 +30,7 @@ function MainContent() {
   const location = useLocation();
   return (
         <div className="flex flex-col flex-1">
-      <Disclosure as="nav" className="border-b border-gray-200 bg-white">
+      <Disclosure as="nav" className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
          {({ open }) => (
             <>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
