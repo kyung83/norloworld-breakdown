@@ -72,6 +72,8 @@ const data = rawData ? JSON.parse(rawData) : {};
   async function handleSubmit(e) {
     e.preventDefault();
 
+    const textAreaValue = textAreaRef.current?.value || "";
+
     let newInvalidFields = {};
 
     if (!selectedDriver.name) newInvalidFields['driver'] = true;
@@ -81,6 +83,7 @@ const data = rawData ? JSON.parse(rawData) : {};
     if (!selectedState.name) newInvalidFields['state'] = true;
     if (!city) newInvalidFields['city'] = true;
     if (!selectedRepairType.name) newInvalidFields['repairType'] = true;
+    if (!textAreaValue.trim()) newInvalidFields['description'] = true;
   
     if (Object.keys(newInvalidFields).length > 0) {
       setInvalidFields(newInvalidFields);
@@ -88,9 +91,6 @@ const data = rawData ? JSON.parse(rawData) : {};
       return;
     }
 
-    console.log(textAreaRef)
-
-    const textAreaValue = textAreaRef.current.value;
 
     const body = {
       date,
@@ -249,7 +249,15 @@ const data = rawData ? JSON.parse(rawData) : {};
           isInvalid={invalidFields.repairType}
         />
 
-        <TextAreaSize textAreaRef={textAreaRef} />
+        <div className="flex flex-col">
+          <label className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-100">
+            * Description
+          </label>
+          <p className={`text-xs mb-1 ${invalidFields.description ? 'text-red-600 font-semibold' : 'text-amber-600 font-medium'}`}>
+            You MUST enter a description. If you leave this blank, your breakdown will NOT be submitted and you will have to start over with a blank form.
+          </p>
+          <TextAreaSize textAreaRef={textAreaRef} />
+        </div>
         <div className="my-4">
             <label
               htmlFor="file"
