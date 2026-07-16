@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from 'react-router-dom';
 
 const endPoint =
-    "https://script.google.com/macros/s/AKfycbxQvcen9VHd-lysj7SjmT5Vj5PWqUUMmP2n--SCgOIXc57YKvR7mdR9KioNNqnIetyk/exec";
+    "https://script.google.com/macros/s/AKfycbxd5pJ5hM5tTsYaZMrIkjG5zu7TxFBgG0-Tg_0xgiR47smICy7Fe_jRKA5Up-Mnw3PmbA/exec";
 
 export default function StatusComponent() {
     const [{ data, loading, error }] = useAxios(endPoint);
