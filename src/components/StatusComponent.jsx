@@ -39,8 +39,8 @@ export default function StatusComponent() {
 
         
     useEffect(() => {
-        if (selectedDriver.name && data.breakdownsOpen) {
-            const driverBreakdowns = data.breakdownsOpen.filter(breakdown => breakdown.data[2] === selectedDriver.name);
+            if (selectedDriver.name && data.breakDowns) {
+            const driverBreakdowns = data.breakDowns.filter(breakdown => breakdown["Driver Name"] === selectedDriver.name);
             const breakdownsForName = driverBreakdowns.map((breakdown, idx) => {
                 const fechaOriginal = breakdown.data[1];
                 const fechaParseada = new Date(fechaOriginal);
