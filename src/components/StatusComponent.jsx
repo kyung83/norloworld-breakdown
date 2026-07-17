@@ -11,7 +11,7 @@ const endPoint =
     "https://script.google.com/macros/s/AKfycbzX6QjhoOsurYDexFE99aCOl1NPJ-MTmjw2U8i7mhNuMaLlJUH7I6Gda0dAOAORnCbB/exec";
 
 export default function StatusComponent() {
-    const [{ data, loading, error }] = useAxios(endPoint);
+    const [{ data, loading, error }] = useAxios(endPoint + "?route=getBreakdowns");    
     const [
         { data: postData, loading: postLoading, error: postError },
         executePost,
